@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -41,6 +42,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late List<dynamic> location1;
+  AudioPlayer audioPlayer = AudioPlayer();
   late LatLng curr;
   late TextEditingController location = TextEditingController();
   int heart = 0;
@@ -193,8 +195,15 @@ class _MyHomePageState extends State<MyHomePage> {
         var jsonData = jsonDecode(response.body);
         print(jsonData["heart_rate"]);
 
+        int heartRate = jsonData["heart_rate"];
+
+        if (heartRate > 70) {
+          // Play a loud sound
+          playSound();
+        }
+
         print("Successfull");
-        return jsonData["heart_rate"];
+        return heartRate;
       } else {
         print("nahi hua");
         return 1;
@@ -203,5 +212,11 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e.toString());
       return 1;
     }
+  }
+
+  // Function to play a loud sound
+  Future<void> playSound() async {
+    // You can replace 'alarm_sound.mp3' with the path to your audio file\
+    audioPlayer.play(AssetSource("buzzer.mp3"));
   }
 }

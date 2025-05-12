@@ -41,10 +41,11 @@ class _HomeViewState extends State<HomeView> {
       onPhoneShake: () async {
         showToast("Shake! Shake!");
         Get.snackbar("Shake", "Shake");
-        _getUserLocation();
+
         await Geolocator.requestPermission();
         await Permission.sms.request();
         await Permission.microphone.request();
+        await _getUserLocation();
         print("Send");
         await _sendSMS();
         _listen();
@@ -136,9 +137,6 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 30,
-            ),
             Container(
               child: ElevatedButton(
                   onPressed: () {
@@ -153,47 +151,47 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-    required Color color,
-  }) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 8,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 30, color: Colors.white),
-            SizedBox(height: 8),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildActionButton({
+  //   required IconData icon,
+  //   required String label,
+  //   required VoidCallback onPressed,
+  //   required Color color,
+  // }) {
+  //   return GestureDetector(
+  //     onTap: onPressed,
+  //     child: Container(
+  //       padding: EdgeInsets.all(10),
+  //       decoration: BoxDecoration(
+  //         color: color,
+  //         borderRadius: BorderRadius.circular(15),
+  //         boxShadow: [
+  //           BoxShadow(
+  //             color: Colors.black26,
+  //             blurRadius: 8,
+  //             offset: Offset(0, 3),
+  //           ),
+  //         ],
+  //       ),
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(icon, size: 30, color: Colors.white),
+  //           SizedBox(height: 8),
+  //           Text(
+  //             label,
+  //             style: TextStyle(
+  //               color: Colors.white,
+  //               fontWeight: FontWeight.bold,
+  //               fontSize: 16,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  void _getUserLocation() async {
+  Future<void> _getUserLocation() async {
     var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
